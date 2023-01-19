@@ -1,0 +1,16 @@
+/* .nojs input:invalid, form.invalid input:invalid { */
+.nojs input:invalid, form.invalid input:invalid {
+  border: 1px dashed red;
+}
+
+error-messages {
+  display: block;
+  margin: 1rem;
+}
+
+error-messages ul {
+  display: inline-block;
+  margin: 0;
+  left: 0;
+  color: red;
+}
