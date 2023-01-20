@@ -1,5 +1,4 @@
-/* .nojs input:invalid, form.invalid input:invalid { */
-.nojs input:invalid, form.invalid input:invalid {
+.nojs input:invalid, form.in-validation input:invalid {
   border: 1px dashed red;
 }
 
@@ -13,4 +12,9 @@ error-messages ul {
   margin: 0;
   left: 0;
   color: red;
+}
+
+label {
+  display: inline-block;
+  min-width: 30ch;
 }

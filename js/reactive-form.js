@@ -1,51 +1,32 @@
 /* global HTMLFormElement, customElements */
 
 class ReactiveForm extends HTMLFormElement {
-  constructor () {
-    super()
-    this.startedValidation = false
-  }
-
   connectedCallback () {
-    for (const field of this.elements) {
-      field.addEventListener('invalid', (event) => {
-        event.preventDefault() // stops standard error behaviour (e.g. for required)
-        this.markAsInvalid()
-      })
+    this.fieldValidationHandler = (event) => {
+      // stop standard error behaviour (e.g. for required)
+      event.preventDefault()
+      this.setValidationStatus()
     }
 
-    this.submitHandler = this.checkValidityStatus.bind(this)
-    this.addEventListener('submit', this.submitHandler)
+    for (const field of this.elements) { field.addEventListener('invalid', this.fieldValidationHandler) }
   }
 
   disconnectedCallback () {
-    if (this.submitHandler) {
-      this.removeEventListener('submit', this.submitHandler)
-    }
+    this.removeEventListener('submit', this.submitHandler)
   }
 
-  checkValidityStatus (event) {
-    console.log('start validation process')
-    const isValid = this.checkValidity()
-
-    if (!isValid) {
-      event?.preventDefault()
-      this.markAsInvalid()
-      return false
-    } else {
-      this.markAsValid()
-    }
+  setValidationStatus (event) {
+    if (this.isInValidation) return
+    this.markAsInValidation()
   }
 
   get isInValidation () {
     return this.classList.contains('in-validation')
   }
 
-  markAsInvalid () {
+  markAsInValidation () {
     this.classList.add('in-validation')
   }
-
-  markAsValid () { this.classList.remove('in-validation') }
 }
 
 customElements.define('reactive-form', ReactiveForm, { extends: 'form' })

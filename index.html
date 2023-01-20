@@ -15,20 +15,21 @@
 
   <form is="reactive-form" action="/" method="GET">
     <input-error-messages>
-      <label> username:
-        <input type="text" name="username" required minlength="5" maxlength="20">
-      </label>
+      <label for="username-field">username:</label>
+      <input id="username-field" type="text" name="username" required minlength="5" maxlength="20">
     </input-error-messages>
 
     <input-error-messages>
-      <label> password:
-        <input id="password-field" type="password" name="password" required minlength="8">
-      </label>
+      <label for="password-field">password:</label>
+      <input id="password-field" type="password" name="password" required minlength="8">
     </input-error-messages>
+
     <input-error-messages>
-      <label> confirm password:
-        <input is="reenter-input" type="password" related-field="#password-field" required>
-      </label>
+      <label for="confirm-password-field">confirm password:</label>
+      <input is="reenter-input" id="confirm-password-field" type="password" related-field="#password-field" required>
+      <error-messages>
+        <ul><li>error of a server side validation</li></ul>
+      </error-messages>
     </input-error-messages>
 
     <button type="submit">Send</button>

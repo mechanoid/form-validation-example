@@ -23,14 +23,33 @@ const errorMessages = {
 class InputErrorMessages extends HTMLElement {
   async connectedCallback () {
     this.input = this.querySelector('input,select,textarea')
-    this.errorMessageContainer = await this.createErrorMessageContainer()
 
-    this.revalidationListener = () => { this.writeMessages() }
+    // allow server side rendered error messages
+    this.errorMessageContainer = this.querySelector('error-messages') || await this.createErrorMessageContainer()
 
-    this.input?.addEventListener('invalid', this.revalidationListener)
-    this.input?.addEventListener('input', this.revalidationListener)
-    this.input?.addEventListener('blur', this.revalidationListener)
-    this.input?.addEventListener('custom:valid', this.revalidationListener)
+    this.revalidationHandler = (event) => {
+      if (!this.input?.form?.isInValidation) { return }
+      this.cleanup()
+      this.input.checkValidity()
+    }
+
+    this.inputBecomesValidHandler = () => this.cleanup()
+    this.inputBecomesInvalidHandler = (e) => {
+      if (!this.input?.form?.isInValidation) { return }
+      this.writeMessages()
+    }
+
+    this.input?.addEventListener('invalid', this.inputBecomesInvalidHandler)
+    this.input?.addEventListener('input', this.revalidationHandler)
+    this.input?.addEventListener('blur', this.revalidationHandler)
+    this.input?.addEventListener('custom:valid', this.inputBecomesValidHandler)
+  }
+
+  disconnectedCallback () {
+    this.input?.removeEventListener('invalid', this.inputBecomesInvalidHandler)
+    this.input?.removeEventListener('input', this.revalidationHandler)
+    this.input?.removeEventListener('blur', this.revalidationHandler)
+    this.input?.removeEventListener('custom:valid', this.inputBecomesValidHandler)
   }
 
   cleanup () {
@@ -38,9 +57,6 @@ class InputErrorMessages extends HTMLElement {
   }
 
   async writeMessages () {
-    if (!this.input?.form?.isInValidation) { return }
-
-    this.cleanup()
     const { validity } = this.input
 
     const errors = fieldErrorTypes.map((errorType) => {
@@ -55,10 +71,6 @@ class InputErrorMessages extends HTMLElement {
         errorList.insertAdjacentHTML('beforeend', errorMessageTemplate(error))
       }
     }
-  }
-
-  disconnectedCallback () {
-    this.input?.removeEventListener('invalid', this.invalidListener)
   }
 
   async createErrorMessageContainer () {
