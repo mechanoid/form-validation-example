@@ -57,6 +57,7 @@ class InputErrorMessages extends HTMLElement {
   }
 
   async writeMessages () {
+    this.cleanup()
     const { validity } = this.input
 
     const errors = fieldErrorTypes.map((errorType) => {
