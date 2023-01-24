@@ -29,9 +29,9 @@ class InputErrorMessage extends HTMLElement {
       this.writeMessages()
     }
 
-    this.input?.addEventListener('invalid', this.inputBecomesInvalidHandler)
     this.input?.addEventListener('input', this.revalidationHandler)
     this.input?.addEventListener('blur', this.revalidationHandler)
+    this.input?.addEventListener('invalid', this.inputBecomesInvalidHandler)
     this.input?.addEventListener('custom:valid', this.inputBecomesValidHandler)
   }
 

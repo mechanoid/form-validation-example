@@ -6,6 +6,13 @@ class ReenterInput extends HTMLInputElement {
       ? document.querySelector(this.getAttribute('related-field'))
       : undefined
 
+    const validationListener = () => {
+      if (!this.isInValidation) return false // if form has not been submitted, just leave
+
+      this.setCustomValidity('') // clean up custom error message state
+      this.validate()
+    }
+
     const relatedFieldValidationListener = () => {
       if (!this.isInValidation) return false // if form has not been submitted, just leave
 
@@ -13,13 +20,6 @@ class ReenterInput extends HTMLInputElement {
       if (!isValid) {
         this.reportValidity()
       }
-    }
-
-    const validationListener = () => {
-      if (!this.isInValidation) return false // if form has not been submitted, just leave
-
-      this.setCustomValidity('') // clean up custom error message state
-      this.validate()
     }
 
     this.addEventListener('input', validationListener)

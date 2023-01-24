@@ -8,7 +8,9 @@ class ReactiveForm extends HTMLFormElement {
       this.setValidationStatus()
     }
 
-    for (const field of this.elements) { field.addEventListener('invalid', this.fieldValidationHandler) }
+    for (const field of this.elements) {
+      field.addEventListener('invalid', this.fieldValidationHandler)
+    }
   }
 
   setValidationStatus (event) {
