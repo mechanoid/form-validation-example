@@ -1,24 +1,8 @@
 /* global HTMLElement, customElements */
 
-const errorMessageTemplate = (message) => `<li>${message}</li>`
-const errorMessageListTemplate = () => '<ul></ul>'
 const errorMessageContainerTemplate = () => '<error-messages></error-messages>'
 
 const fieldErrorTypes = ['badInput', 'customError', 'patternMismatch', 'rangeOverflow', 'rangeUnderflow', 'stepMismatch', 'tooLong', 'tooShort', 'typeMismatch', 'valueMissing']
-
-// TODO: get error messages from attribute property, e.g. errors="{'badInput':'...',...}"
-const errorMessages = {
-  badInput: 'errorneous input',
-  customError: 'fields must be similar',
-  patternMismatch: 'has to comply to pattern /xxx/',
-  rangeOverflow: 'to much entries',
-  rangeUnderflow: 'not enough entries',
-  stepMismatch: 'steps mismatching',
-  tooLong: 'too long',
-  tooShort: 'too short',
-  typeMismatch: 'wrong type!',
-  valueMissing: 'this field is required!!'
-}
 
 class InputErrorMessages extends HTMLElement {
   async connectedCallback () {
@@ -33,10 +17,12 @@ class InputErrorMessages extends HTMLElement {
       this.input.checkValidity()
     }
 
+    const throttledWriteMessages = trailingThrottle(() => this.writeMessages())
+
     this.inputBecomesValidHandler = () => this.cleanup()
     this.inputBecomesInvalidHandler = (e) => {
       if (!this.input?.form?.isInValidation) { return }
-      this.writeMessages()
+      throttledWriteMessages()
     }
 
     this.input?.addEventListener('invalid', this.inputBecomesInvalidHandler)
@@ -53,24 +39,17 @@ class InputErrorMessages extends HTMLElement {
   }
 
   cleanup () {
-    this.errorMessageContainer.innerHTML = ''
+    this.errorMessageContainer.textContent = ''
   }
 
   async writeMessages () {
     this.cleanup()
     const { validity } = this.input
 
-    const errors = fieldErrorTypes.map((errorType) => {
-      const hasError = validity[errorType]
-      if (hasError) { return errorMessages[errorType] }
-      return undefined
-    }).filter(x => !!x)
+    const hasErrors = fieldErrorTypes.some((type) => !!validity[type])
 
-    if (errors.length > 0) {
-      const errorList = await this.createErrorList()
-      for (const error of errors) {
-        errorList.insertAdjacentHTML('beforeend', errorMessageTemplate(error))
-      }
+    if (hasErrors) {
+      this.errorMessageContainer.textContent = this.input.validationMessage
     }
   }
 
@@ -78,11 +57,21 @@ class InputErrorMessages extends HTMLElement {
     await this.insertAdjacentHTML('beforeend', errorMessageContainerTemplate())
     return this.querySelector('error-messages')
   }
-
-  async createErrorList () {
-    await this.errorMessageContainer.insertAdjacentHTML('beforeend', errorMessageListTemplate())
-    return this.errorMessageContainer.querySelector('ul')
-  }
 }
 
 customElements.define('input-error-messages', InputErrorMessages)
+
+function trailingThrottle (func, waitFor = 300) {
+  console.log('init throttled')
+  let timeout = null
+
+  return () => {
+    if (timeout) {
+      clearTimeout(timeout)
+    }
+
+    timeout = setTimeout(() => {
+      return func()
+    }, waitFor)
+  }
+}

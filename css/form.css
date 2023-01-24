@@ -5,14 +5,9 @@
 error-messages {
   display: block;
   margin: 1rem;
-}
-
-error-messages ul {
-  display: inline-block;
-  margin: 0;
-  left: 0;
   color: red;
 }
+
 
 label {
   display: inline-block;
