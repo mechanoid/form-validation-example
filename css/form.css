@@ -1,15 +1,63 @@
-.nojs input:invalid, form.in-validation input:invalid {
-  border: 1px dashed red;
+:root {
+  --default-color: #D5D5DA;
+  --error-color: rgb(253, 35, 61);
+  --success-color: #66BC87;
+}
+* {
+  box-sizing: border-box;
 }
 
-error-messages {
+body, html {
+  height: 100%;
+  display: grid;
+  font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+body {
+  background: #eecda3; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #eecda3, #ef629f); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #eecda3, #ef629f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.nojs input:invalid, form.in-validation input:invalid {
+  border-color: var(--error-color);
+}
+
+.nojs input:valid, form.in-validation input:valid {
+  border-color: var(--success-color);
+}
+
+input {
+  border: 1px solid var(--default-color);
+  padding: 0.8rem 0.5rem 0.3rem 0.5rem;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.has-errors input {
+  margin-bottom: .5rem;
+}
+
+error-message {
   display: block;
-  margin: 1rem;
-  color: red;
+  color: var(--error-color);
+  line-height: 1rem;
+  margin-bottom: .5em;
+  font-size: .875rem;
+  padding: 0 .5rem;
 }
 
 
 label {
   display: inline-block;
-  min-width: 30ch;
+  margin-bottom: .3rem;
+}
+
+
+form {
+  display: block;
+  width: 30rem;
+  margin: auto;
+  padding: 2rem;
+  background-color: #fff;
 }

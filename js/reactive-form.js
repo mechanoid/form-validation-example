@@ -11,10 +11,6 @@ class ReactiveForm extends HTMLFormElement {
     for (const field of this.elements) { field.addEventListener('invalid', this.fieldValidationHandler) }
   }
 
-  disconnectedCallback () {
-    this.removeEventListener('submit', this.submitHandler)
-  }
-
   setValidationStatus (event) {
     if (this.isInValidation) return
     this.markAsInValidation()

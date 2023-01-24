@@ -6,46 +6,62 @@ class ReenterInput extends HTMLInputElement {
       ? document.querySelector(this.getAttribute('related-field'))
       : undefined
 
-    this.relatedFieldValidationListener = () => {
+    const relatedFieldValidationListener = () => {
+      if (!this.isInValidation) return false // if form has not been submitted, just leave
+
       const isValid = this.validate()
       if (!isValid) {
         this.reportValidity()
       }
     }
-    this.validationListener = () => { this.validate() }
-    this.addEventListener('input', this.validationListener)
-    this.addEventListener('blur', this.validationListener)
-    this.relatedField?.addEventListener('input', this.relatedFieldValidationListener)
-    this.relatedField?.addEventListener('blur', this.relatedFieldValidationListener)
+
+    const validationListener = () => {
+      if (!this.isInValidation) return false // if form has not been submitted, just leave
+
+      this.setCustomValidity('') // clean up custom error message state
+      this.validate()
+    }
+
+    this.addEventListener('input', validationListener)
+    this.addEventListener('blur', validationListener)
+    this.relatedField?.addEventListener('input', relatedFieldValidationListener)
+    this.relatedField?.addEventListener('blur', relatedFieldValidationListener)
   }
 
   disconnectedCallback () {
-    this.removeEventListener('input', this.validationListener)
     this.relatedField?.removeEventListener('input', this.validationListener)
-    this.removeEventListener('blur', this.validationListener)
   }
 
+  // this will be called e.g. by a form submit
   checkValidity () {
     const validity = super.checkValidity()
     if (!validity) { return false }
     return this.validate()
   }
 
-  reportValidity () {
-    this.validate()
-    return super.reportValidity()
-  }
-
   validate () {
-    if (this.value && (this.value !== this.relatedField?.value)) {
+    if (!this.isInValidation) return false
+
+    // check first if other validations hit (like required) which
+    // are available on the inherited class
+    if (!super.checkValidity()) {
+      this.reportValidity()
+
+      // check equality of related field next
+    } else if (this.value !== this.relatedField?.value) {
       this.setCustomValidity('fields do not match!!')
       return false
+
+    // everything fine. (tell the input-error-message element!)
     } else {
-      this.setCustomValidity('')
       // Fields only send "invalid" events. There are not "valid" events, so we send our own
       this.dispatchEvent(new CustomEvent('custom:valid'))
       return true
     }
+  }
+
+  get isInValidation () {
+    return this.form?.isInValidation
   }
 }
 

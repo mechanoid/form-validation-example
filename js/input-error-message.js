@@ -1,41 +1,38 @@
 /* global HTMLElement, customElements */
 
-const errorMessageContainerTemplate = () => '<error-messages></error-messages>'
+const errorMessageContainerTemplate = () => '<error-message></error-message>'
 
 const fieldErrorTypes = ['badInput', 'customError', 'patternMismatch', 'rangeOverflow', 'rangeUnderflow', 'stepMismatch', 'tooLong', 'tooShort', 'typeMismatch', 'valueMissing']
 
-class InputErrorMessages extends HTMLElement {
+class InputErrorMessage extends HTMLElement {
   async connectedCallback () {
     this.input = this.querySelector('input,select,textarea')
 
     // allow server side rendered error messages
-    this.errorMessageContainer = this.querySelector('error-messages') || await this.createErrorMessageContainer()
+    this.errorMessageContainer = this.querySelector('error-message') || await this.createErrorMessageContainer()
 
     this.revalidationHandler = (event) => {
-      if (!this.input?.form?.isInValidation) { return }
       this.cleanup()
+      if (!this.input?.form?.isInValidation) { return }
+
+      this.classList.remove('has-errors')
       this.input.checkValidity()
     }
 
-    const throttledWriteMessages = trailingThrottle(() => this.writeMessages())
+    this.inputBecomesValidHandler = () => {
+      this.cleanup()
+    }
 
-    this.inputBecomesValidHandler = () => this.cleanup()
     this.inputBecomesInvalidHandler = (e) => {
       if (!this.input?.form?.isInValidation) { return }
-      throttledWriteMessages()
+      this.classList.add('has-errors')
+      this.writeMessages()
     }
 
     this.input?.addEventListener('invalid', this.inputBecomesInvalidHandler)
     this.input?.addEventListener('input', this.revalidationHandler)
     this.input?.addEventListener('blur', this.revalidationHandler)
     this.input?.addEventListener('custom:valid', this.inputBecomesValidHandler)
-  }
-
-  disconnectedCallback () {
-    this.input?.removeEventListener('invalid', this.inputBecomesInvalidHandler)
-    this.input?.removeEventListener('input', this.revalidationHandler)
-    this.input?.removeEventListener('blur', this.revalidationHandler)
-    this.input?.removeEventListener('custom:valid', this.inputBecomesValidHandler)
   }
 
   cleanup () {
@@ -55,23 +52,8 @@ class InputErrorMessages extends HTMLElement {
 
   async createErrorMessageContainer () {
     await this.insertAdjacentHTML('beforeend', errorMessageContainerTemplate())
-    return this.querySelector('error-messages')
+    return this.querySelector('error-message')
   }
 }
 
-customElements.define('input-error-messages', InputErrorMessages)
-
-function trailingThrottle (func, waitFor = 300) {
-  console.log('init throttled')
-  let timeout = null
-
-  return () => {
-    if (timeout) {
-      clearTimeout(timeout)
-    }
-
-    timeout = setTimeout(() => {
-      return func()
-    }, waitFor)
-  }
-}
+customElements.define('input-error-message', InputErrorMessage)
