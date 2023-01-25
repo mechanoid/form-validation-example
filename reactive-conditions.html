@@ -9,7 +9,7 @@
   <script src="//unpkg.com/@ungap/custom-elements/es.js"></script>
   <script src="./js/reenter-input.js" type="module" async></script>
   <script src="./js/reactive-form.js" type="module" async></script>
-  <script src="./js/reactive-error-message.js" type="module" async></script>
+  <script src="./js/reactive-conditions.js" type="module" async></script>
 </head>
 <body>
   <nav>
@@ -19,19 +19,27 @@
     </ul>
   </nav>
 
-  <form is="reactive-form" action="/" method="GET">
-    <reactive-error-message class="has-errors">
+  <form is="reactive-form" class="with-conditions" action="/" method="GET">
+    <reactive-conditions class="has-errors">
       <label for="username-field">Username</label>
       <input id="username-field" type="text" name="username" required minlength="5" maxlength="20">
-      <error-message>example error message of a server side validation</error-message>
-    </reactive-error-message>
+      <ul is="condition-list">
+        <li is="condition-item" condition="valueMissing">The field is required</condition-item>
+        <li is="condition-item" condition="tooShort">Please provide a username of minimum length 5</condition-item>
+        <li is="condition-item" condition="tooLong">Usernames should be not longer than 20 chars</condition-item>
+      </ul>
+    </reactive-conditions>
 
-    <reactive-error-message>
+    <reactive-conditions>
       <label for="password-field">Password</label>
       <input id="password-field" type="password" name="password" required minlength="8">
-    </reactive-error-message>
+      <ul is="condition-list">
+        <li is="condition-item" condition="valueMissing">The field is required</condition-item>
+        <li is="condition-item" condition="tooShort">Please provide a username of minimum length 8</condition-item>
+      </ul>
+    </reactive-conditions>
 
-    <reactive-error-message>
+    <reactive-conditions>
       <label for="confirm-password-field">Confirm Password</label>
       <input
         is="reenter-input"
@@ -40,7 +48,11 @@
         related-field="#password-field"
         error-message="please confirm the entered password"
         required>
-    </reactive-error-message>
+        <ul is="condition-list">
+          <li is="condition-item" condition="valueMissing">The field is required</condition-item>
+          <li is="condition-item" condition="customError">The confirm password has to be equal to the provided password</condition-item>
+        </ul>
+    </reactive-conditions>
 
     <button type="submit">Send</button>
   </form>

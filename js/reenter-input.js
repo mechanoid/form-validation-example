@@ -1,4 +1,4 @@
-/* global HTMLInputElement, customElements, CustomEvent */
+/* eslint-env browser */
 
 class ReenterInput extends HTMLInputElement {
   connectedCallback () {

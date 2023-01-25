@@ -34,6 +34,10 @@ input {
   margin-bottom: 1.5rem;
 }
 
+.with-conditions input {
+  margin-bottom: .5rem;
+}
+
 .has-errors input {
   margin-bottom: .5rem;
 }
@@ -71,4 +75,27 @@ button {
   text-transform: uppercase;
   color: #fff;
   margin-top: .5rem;
+}
+
+nav li {
+  list-style-type: none;
+}
+
+form ul {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 1rem;
+}
+
+form li {
+  color: #b1afac;
+
+}
+
+[is=condition-item].valid {
+  color: green;
+}
+
+[is=condition-item].invalid {
+  color: red;
 }

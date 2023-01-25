@@ -1,4 +1,4 @@
-/* global HTMLFormElement, customElements */
+/* eslint-env browser */
 
 class ReactiveForm extends HTMLFormElement {
   connectedCallback () {

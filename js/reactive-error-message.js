@@ -1,4 +1,4 @@
-/* global HTMLElement, customElements */
+/* eslint-env browser */
 
 const errorMessageContainerTemplate = () => '<error-message></error-message>'
 
