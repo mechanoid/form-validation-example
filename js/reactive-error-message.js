@@ -4,7 +4,7 @@ const errorMessageContainerTemplate = () => '<error-message></error-message>'
 
 const fieldErrorTypes = ['badInput', 'customError', 'patternMismatch', 'rangeOverflow', 'rangeUnderflow', 'stepMismatch', 'tooLong', 'tooShort', 'typeMismatch', 'valueMissing']
 
-class InputErrorMessage extends HTMLElement {
+class ReactiveErrorMessage extends HTMLElement {
   async connectedCallback () {
     this.input = this.querySelector('input,select,textarea')
 
@@ -56,4 +56,4 @@ class InputErrorMessage extends HTMLElement {
   }
 }
 
-customElements.define('input-error-message', InputErrorMessage)
+customElements.define('reactive-error-message', ReactiveErrorMessage)

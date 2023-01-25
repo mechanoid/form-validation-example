@@ -9,23 +9,23 @@
   <script src="//unpkg.com/@ungap/custom-elements/es.js"></script>
   <script src="./js/reenter-input.js" type="module" async></script>
   <script src="./js/reactive-form.js" type="module" async></script>
-  <script src="./js/input-error-message.js" type="module" async></script>
+  <script src="./js/reactive-error-message.js" type="module" async></script>
 </head>
 <body>
 
   <form is="reactive-form" action="/" method="GET">
-    <input-error-message class="has-errors">
+    <reactive-error-message class="has-errors">
       <label for="username-field">E-Mail Address</label>
       <input id="username-field" type="text" name="username" required minlength="5" maxlength="20">
       <error-message>example error message of a server side validation</error-message>
-    </input-error-message>
+    </reactive-error-message>
 
-    <input-error-message>
+    <reactive-error-message>
       <label for="password-field">Password</label>
       <input id="password-field" type="password" name="password" required minlength="8">
-    </input-error-message>
+    </reactive-error-message>
 
-    <input-error-message>
+    <reactive-error-message>
       <label for="confirm-password-field">Confirm Password</label>
       <input
         is="reenter-input"
@@ -34,7 +34,7 @@
         related-field="#password-field"
         error-message="please confirm the entered password"
         required>
-    </input-error-message>
+    </reactive-error-message>
 
     <button type="submit">Send</button>
   </form>
