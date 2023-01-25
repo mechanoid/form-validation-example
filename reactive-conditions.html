@@ -20,13 +20,13 @@
   </nav>
 
   <form is="reactive-form" class="with-conditions" action="/" method="GET">
-    <reactive-conditions class="has-errors">
+    <reactive-conditions>
       <label for="username-field">Username</label>
       <input id="username-field" type="text" name="username" required minlength="5" maxlength="20">
       <ul is="condition-list">
-        <li is="condition-item" condition="valueMissing">The field is required</condition-item>
-        <li is="condition-item" condition="tooShort">Please provide a username of minimum length 5</condition-item>
-        <li is="condition-item" condition="tooLong">Usernames should be not longer than 20 chars</condition-item>
+        <li is="condition-item" condition="valueMissing">The field is required</li>
+        <li is="condition-item" condition="tooShort">Please provide a username of minimum length 5</li>
+        <li is="condition-item" condition="tooLong">Usernames should be not longer than 20 chars</li>
       </ul>
     </reactive-conditions>
 
@@ -34,8 +34,8 @@
       <label for="password-field">Password</label>
       <input id="password-field" type="password" name="password" required minlength="8">
       <ul is="condition-list">
-        <li is="condition-item" condition="valueMissing">The field is required</condition-item>
-        <li is="condition-item" condition="tooShort">Please provide a username of minimum length 8</condition-item>
+        <li is="condition-item" condition="valueMissing">The field is required</li>
+        <li is="condition-item" condition="tooShort">Please provide a username of minimum length 8</li>
       </ul>
     </reactive-conditions>
 
@@ -49,8 +49,8 @@
         error-message="please confirm the entered password"
         required>
         <ul is="condition-list">
-          <li is="condition-item" condition="valueMissing">The field is required</condition-item>
-          <li is="condition-item" condition="customError">The confirm password has to be equal to the provided password</condition-item>
+          <li is="condition-item" condition="valueMissing">The field is required</li>
+          <li is="condition-item" condition="customError">The confirm password has to be equal to the provided password</li>
         </ul>
     </reactive-conditions>
 

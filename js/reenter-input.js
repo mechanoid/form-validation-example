@@ -7,19 +7,13 @@ class ReenterInput extends HTMLInputElement {
       : undefined
 
     const validationListener = () => {
-      if (!this.isInValidation) return false // if form has not been submitted, just leave
-
       this.setCustomValidity('') // clean up custom error message state
       this.validate()
     }
 
     const relatedFieldValidationListener = () => {
-      if (!this.isInValidation) return false // if form has not been submitted, just leave
-
-      const isValid = this.validate()
-      if (!isValid) {
-        this.reportValidity()
-      }
+      if (!this.value) { return }
+      this.validate()
     }
 
     this.addEventListener('input', validationListener)
@@ -40,12 +34,9 @@ class ReenterInput extends HTMLInputElement {
   }
 
   validate () {
-    if (!this.isInValidation) return false
-
-    // check first if other validations hit (like required) which
-    // are available on the inherited class
+    // check native constraints
     if (!super.checkValidity()) {
-      this.reportValidity()
+      return false
 
       // check equality of related field next
     } else if (this.value !== this.relatedField?.value) {
@@ -60,9 +51,6 @@ class ReenterInput extends HTMLInputElement {
     }
   }
 
-  get isInValidation () {
-    return this.form?.isInValidation
-  }
 }
 
 customElements.define('reenter-input', ReenterInput, { extends: 'input' })

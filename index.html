@@ -20,7 +20,9 @@
   </nav>
 
   <form is="reactive-form" action="/" method="GET">
-    <reactive-error-message class="has-errors">
+    <reactive-error-message
+      class="has-errors"
+      errors="{}">
       <label for="username-field">Username</label>
       <input id="username-field" type="text" name="username" required minlength="5" maxlength="20">
       <error-message>example error message of a server side validation</error-message>
@@ -28,18 +30,22 @@
 
     <reactive-error-message>
       <label for="password-field">Password</label>
-      <input id="password-field" type="password" name="password" required minlength="8">
+      <password-inspector>
+        <input id="password-field" type="password" name="password" required minlength="8">
+      </password-inspector>
     </reactive-error-message>
 
     <reactive-error-message>
       <label for="confirm-password-field">Confirm Password</label>
-      <input
-        is="reenter-input"
-        id="confirm-password-field"
-        type="password"
-        related-field="#password-field"
-        error-message="please confirm the entered password"
-        required>
+      <password-inspector>
+        <input
+          is="reenter-input"
+          id="confirm-password-field"
+          type="password"
+          related-field="#password-field"
+          error-message="please confirm the entered password"
+          required>
+      </password-inspector>
     </reactive-error-message>
 
     <button type="submit">Send</button>

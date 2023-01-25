@@ -4,6 +4,12 @@ const errorMessageContainerTemplate = () => '<error-message></error-message>'
 
 const fieldErrorTypes = ['badInput', 'customError', 'patternMismatch', 'rangeOverflow', 'rangeUnderflow', 'stepMismatch', 'tooLong', 'tooShort', 'typeMismatch', 'valueMissing']
 
+
+const errorMessages = {
+  badInput: 'Ihre Eingabe ist fehlerhaft!'
+}
+
+
 class ReactiveErrorMessage extends HTMLElement {
   async connectedCallback () {
     this.input = this.querySelector('input,select,textarea')
@@ -13,7 +19,7 @@ class ReactiveErrorMessage extends HTMLElement {
 
     this.revalidationHandler = (event) => {
       this.cleanup()
-      if (!this.input?.form?.isInValidation) { return }
+      // if (!this.input?.form?.isInValidation) { return }
 
       this.classList.remove('has-errors')
       this.input.checkValidity()
@@ -24,12 +30,12 @@ class ReactiveErrorMessage extends HTMLElement {
     }
 
     this.inputBecomesInvalidHandler = (e) => {
-      if (!this.input?.form?.isInValidation) { return }
+      // if (!this.input?.form?.isInValidation) { return }
       this.classList.add('has-errors')
       this.writeMessages()
     }
 
-    this.input?.addEventListener('input', this.revalidationHandler)
+    // this.input?.addEventListener('input', this.revalidationHandler)
     this.input?.addEventListener('blur', this.revalidationHandler)
     this.input?.addEventListener('invalid', this.inputBecomesInvalidHandler)
     this.input?.addEventListener('custom:valid', this.inputBecomesValidHandler)
