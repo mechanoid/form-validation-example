@@ -77,6 +77,10 @@ button {
   margin-top: .5rem;
 }
 
+nav {
+  position: fixed;
+}
+
 nav li {
   list-style-type: none;
 }
